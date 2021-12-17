@@ -1,7 +1,10 @@
-from flask import Blueprint, Response, request, jsonify
+from flask import Response, request, jsonify
+from flask_restful import Resource
 from database.exts import db
 from database import models
+import json
 
+'''
 users = Blueprint("users", __name__)
 
 @users.route("/movies")
@@ -18,3 +21,19 @@ def add_movie():
 	db.session.add(models.User(name=str(body['name']), casts=str(body['casts']), generes=str(body['generes'])))
 	db.session.commit()
 	return Response("success", mimetype="application/json", status=200)
+'''
+
+class UsersApi(Resource):
+	def get(self):
+		movies = models.User.query.all()
+		output = []
+		for movie in movies:
+			output.append(movie.to_json())
+		
+		return {"data": output}, 200
+
+	def post(self):
+		body = request.get_json()
+		db.session.add(models.User(name=str(body['name']), casts=str(body['casts']), generes=str(body['generes'])))
+		db.session.commit()
+		return Response("success", mimetype="application/json", status=200)

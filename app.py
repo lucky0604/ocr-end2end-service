@@ -1,14 +1,14 @@
 from flask import Flask
-from blueprints.user import users
+from flask_restful import Api
+from routes import init_routes
 from database import config
 from database.exts import db
 
 app = Flask(__name__)
+api = Api(app)
+
 app.config.from_object(config)
 db.init_app(app)
 
-app.register_blueprint(users)
-
-
-
+init_routes(api)
 app.run()
