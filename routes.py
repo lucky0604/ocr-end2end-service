@@ -1,4 +1,4 @@
-from blueprints.user import UsersApi
+from api.user import UsersApi
 from api.auth import SignupApi, LoginApi
 
 def init_routes(api):
