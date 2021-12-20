@@ -1,9 +1,9 @@
-from flask import Response, request, jsonify
+from flask import Response, request
+from flask.json import jsonify
 from flask_restful import Resource
 from database.exts import db
 from database import models
-import json
-
+from flask_jwt_extended import jwt_required
 '''
 users = Blueprint("users", __name__)
 
@@ -24,14 +24,15 @@ def add_movie():
 '''
 
 class UsersApi(Resource):
+
 	def get(self):
 		movies = models.User.query.all()
 		output = []
 		for movie in movies:
 			output.append(movie.to_json())
-		
 		return {"data": output}, 200
 
+	@jwt_required()
 	def post(self):
 		body = request.get_json()
 		db.session.add(models.User(name=str(body['name']), casts=str(body['casts']), generes=str(body['generes'])))
