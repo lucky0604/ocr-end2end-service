@@ -3,7 +3,7 @@ from flask.json import jsonify
 from flask_restful import Resource
 from database.exts import db
 from database import models
-from flask_jwt_extended import jwt_required
+from flask_jwt_extended import jwt_required, get_jwt_identity
 '''
 users = Blueprint("users", __name__)
 
@@ -34,6 +34,8 @@ class UsersApi(Resource):
 
 	@jwt_required()
 	def post(self):
+		account_id = get_jwt_identity()
+		print(account_id)
 		body = request.get_json()
 		db.session.add(models.User(name=str(body['name']), casts=str(body['casts']), generes=str(body['generes'])))
 		db.session.commit()

@@ -9,12 +9,15 @@ class User(db.Model, EntityBase):
 	name = db.Column(db.String, unique=True)
 	casts = db.Column(db.String)
 	generes = db.Column(db.String)
+	added_by = db.relationship("Account", backref="account", lazy=True, cascade="all, delete-orphan")
 
 class Account(db.Model, EntityBase):
 	__tablename__ = "movie_table"
 	id = db.Column(db.Integer, primary_key=True)
 	email = db.Column(db.String, unique=True)
 	password = db.Column(db.String, unique=True)
+
+	user_id = db.Column(db.Integer, db.ForeignKey("account.id"), nullable=False)
 
 	def hash_password(self):
 		self.password = generate_password_hash(self.password).decode("utf8")
